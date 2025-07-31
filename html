@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สุขสันต์วันครบรอบ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Prompt', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: linear-gradient(135deg, #ff7eb9, #ff758c);
+            height: 100vh;
+            width: 100vw;
+        }
+        
+        .heart-emoji {
+            position: absolute;
+            font-size: 30px;
+            animation: float 15s linear infinite;
+            filter: drop-shadow(0 0 5px rgba(255, 0, 0, 0.7));
+            z-index: 1;
+            user-select: none;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-20vh) translateX(20px) rotate(360deg);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes twinkle {
+            0% { filter: drop-shadow(0 0 5px rgba(255, 0, 0, 0.7)); }
+            50% { filter: drop-shadow(0 0 15px rgba(255, 0, 0, 1)); }
+            100% { filter: drop-shadow(0 0 5px rgba(255, 0, 0, 0.7)); }
+        }
+        
+        .container {
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            z-index: 100;
+            position: relative;
+        }
+        
+        .btn-read {
+            background: linear-gradient(135deg, #ff0000, #ff5555);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
+        }
+        
+        .btn-read:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(255, 0, 0, 0.6);
+        }
+        
+        .btn-read:active {
+            transform: translateY(1px);
+        }
+        
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        .page-hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+        }
+        
+        .message-container {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        #hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div id="hearts-container"></div>
+    
+    <!-- หน้าแรกที่มีปุ่ม -->
+    <div id="first-page" class="page">
+        <div class="container p-8 md:p-12 max-w-md mx-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-8">❤️</h1>
+            <button id="read-btn" class="btn-read text-white font-bold py-3 px-8 rounded-full text-xl">
+                อ่านข้อความ
+            </button>
+        </div>
+    </div>
+    
+    <!-- หน้าที่สองที่มีข้อความ -->
+    <div id="message-page" class="page page-hidden">
+        <div class="container p-8 md:p-12 max-w-md mx-4 text-center">
+            <div class="message-container p-4">
+                <h2 class="text-3xl font-bold text-white mb-6">ข้อความถึงน้องแก้มบุ๋ม</h2>
+                <div id="message-content" class="text-white text-lg mb-8">
+                    <!-- ข้อความจะถูกเพิ่มตรงนี้ -->
+                    <p>สุขสั้นวันครบรอบนะครับพวกเราผ่านอะไรกันมาเยอะมากเลยครบรอบเดือนที่5แล้วก็ขอไห้หนูมีความสุขอยู่ดื้อไปจนแก่เลยย รักนะคับบ🤪🤪</p>
+                </div>
+            </div>
+            <button id="back-btn" class="bg-white text-red-500 font-bold py-2 px-6 rounded-full text-lg hover:bg-red-50 transition-all">
+                ย้อนกลับ
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('hearts-container');
+            const heartEmojis = ['💖', '❤️', '💕', '💓', '💗', '💘', '💝', '💞'];
+            const firstPage = document.getElementById('first-page');
+            const messagePage = document.getElementById('message-page');
+            const readBtn = document.getElementById('read-btn');
+            const backBtn = document.getElementById('back-btn');
+            
+            // สร้างอิโมจิหัวใจลอยขึ้น
+            function createHeartEmoji() {
+                const heart = document.createElement('div');
+                heart.classList.add('heart-emoji');
+                
+                // สุ่มตำแหน่งแนวนอน
+                const startPositionX = Math.random() * window.innerWidth;
+                heart.style.left = startPositionX + 'px';
+                
+                // สุ่มขนาด
+                const size = Math.floor(Math.random() * 40) + 20;
+                heart.style.fontSize = size + 'px';
+                
+                // สุ่มอิโมจิหัวใจ
+                const emoji = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+                heart.textContent = emoji;
+                
+                // สุ่มความเร็ว
+                const duration = Math.random() * 15 + 10;
+                heart.style.animation = `float ${duration}s linear infinite`;
+                
+                // เพิ่มเอฟเฟกต์วิ้งๆ
+                const twinkleDuration = Math.random() * 2 + 1;
+                heart.style.animation += `, twinkle ${twinkleDuration}s ease-in-out infinite`;
+                
+                container.appendChild(heart);
+                
+                // ลบหัวใจหลังจากที่อนิเมชันเสร็จสิ้น
+                setTimeout(() => {
+                    heart.remove();
+                }, duration * 1000);
+            }
+            
+            // สร้างหัวใจทุกๆ 150ms (เพิ่มความถี่)
+            setInterval(createHeartEmoji, 150);
+            
+            // สร้างหัวใจเริ่มต้นจำนวนมาก
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    createHeartEmoji();
+                }, i * 80);
+            }
+            
+            // การเปลี่ยนหน้า
+            readBtn.addEventListener('click', function() {
+                firstPage.classList.add('page-hidden');
+                setTimeout(() => {
+                    messagePage.classList.remove('page-hidden');
+                }, 500);
+            });
+            
+            backBtn.addEventListener('click', function() {
+                messagePage.classList.add('page-hidden');
+                setTimeout(() => {
+                    firstPage.classList.remove('page-hidden');
+                }, 500);
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'967d615ee2aeee21',t:'MTc1Mzk2Nzg5Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
