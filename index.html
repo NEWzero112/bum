@@ -101,6 +101,13 @@
             pointer-events: none;
             z-index: 1;
         }
+        
+        /* สไตล์สำหรับข้อความ */
+        #message-content {
+            white-space: pre-line; /* ทำให้รองรับการขึ้นบรรทัดใหม่ด้วย \n */
+            text-align: left;
+            line-height: 1.6;
+        }
     </style>
 </head>
 <body>
@@ -118,17 +125,25 @@
     
     <!-- หน้าที่สองที่มีข้อความ -->
     <div id="message-page" class="page page-hidden">
-        <div class="container p-8 md:p-12 max-w-md mx-4 text-center">
+        <div class="container p-8 md:p-12 max-w-md mx-4">
             <div class="message-container p-4">
-                <h2 class="text-3xl font-bold text-white mb-6">ถึงแก้มบุ๋ม</h2>
+                <h2 class="text-3xl font-bold text-white mb-6 text-center">ถึงแก้มบุ๋ม</h2>
                 <div id="message-content" class="text-white text-lg mb-8">
-                    <!-- ข้อความจะถูกเพิ่มตรงนี้ -->
-                    <p>สุขสั้นวันครบรอบนะครับพวกเราผ่านอะไรกันมาเยอะมากเลยครบรอบเดือนที่5แล้วก็ขอไห้หนูมีความสุขอยู่ดื้อไปจนแก่เลยย         รักนะคับบ🤪🤪</p>
+                    <!-- ข้อความตัวอย่างที่มีการขึ้นบรรทัดใหม่ -->
+                    สุขสันต์วันครบรอบของเรานะคับ
+                    
+                    เราได้ผ่านอะไรมาด้วยกันเย้อมากเลย
+                    อยู่ด้วยกันมา5เดือนแล้ว(เป็นปีละมั้ง)
+                    
+                    ขอบคุณที่อยู่เคียงข้างกันมาตลอด
+                    ขอไห้อยู่ดื้อแบบนี้ไปจนแก่เล้ยไอมีนนนน❤️
                 </div>
             </div>
-            <button id="back-btn" class="bg-white text-red-500 font-bold py-2 px-6 rounded-full text-lg hover:bg-red-50 transition-all">
-                ย้อนกลับ
-            </button>
+            <div class="text-center">
+                <button id="back-btn" class="bg-white text-red-500 font-bold py-2 px-6 rounded-full text-lg hover:bg-red-50 transition-all">
+                    ย้อนกลับ
+                </button>
+            </div>
         </div>
     </div>
 
@@ -175,7 +190,7 @@
             }
             
             // สร้างหัวใจทุกๆ 150ms (เพิ่มความถี่)
-            setInterval(createHeartEmoji, 300);
+            setInterval(createHeartEmoji, 150);
             
             // สร้างหัวใจเริ่มต้นจำนวนมาก
             for (let i = 0; i < 50; i++) {
@@ -198,7 +213,17 @@
                     firstPage.classList.remove('page-hidden');
                 }, 500);
             });
+            
+            // ฟังก์ชันสำหรับเปลี่ยนข้อความ (คุณสามารถเรียกใช้ฟังก์ชันนี้เพื่อเปลี่ยนข้อความได้)
+            function changeMessage(newMessage) {
+                const messageContent = document.getElementById('message-content');
+                messageContent.textContent = newMessage;
+            }
+            
+            // ตัวอย่างการเรียกใช้ฟังก์ชัน (คุณสามารถลบบรรทัดนี้ได้)
+            // changeMessage("นี่คือข้อความใหม่\nที่มีการขึ้นบรรทัดใหม่\n\nและมีการเว้นบรรทัดด้วย");
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'967d615ee2aeee21',t:'MTc1Mzk2Nzg5Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'967d8dcd054f7b40',t:'MTc1Mzk2OTcxMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
+
