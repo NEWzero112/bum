@@ -27,6 +27,16 @@
             user-select: none;
         }
         
+        .floating-image {
+            position: absolute;
+            border-radius: 50%;
+            object-fit: cover;
+            animation: float 15s linear infinite;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+            user-select: none;
+        }
+        
         @keyframes float {
             0% {
                 transform: translateY(100vh) translateX(0) rotate(0deg);
@@ -92,7 +102,7 @@
             overflow-y: auto;
         }
         
-        #hearts-container {
+        #floating-container {
             position: fixed;
             top: 0;
             left: 0;
@@ -111,7 +121,7 @@
     </style>
 </head>
 <body>
-    <div id="hearts-container"></div>
+    <div id="floating-container"></div>
     
     <!-- หน้าแรกที่มีปุ่ม -->
     <div id="first-page" class="page">
@@ -132,7 +142,7 @@
                     <!-- ข้อความตัวอย่างที่มีการขึ้นบรรทัดใหม่ -->
                     สุขสันต์วันครบรอบของเรานะคับ
                     
-                    เราได้ผ่านอะไรมาด้วยกันเย้อมากเลย
+                    ราได้ผ่านอะไรมาด้วยกันเย้อมากเลย
                     อยู่ด้วยกันมา5เดือนแล้ว(เป็นปีละมั้ง)
                     
                     ขอบคุณที่อยู่เคียงข้างกันมาตลอด
@@ -149,8 +159,16 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const container = document.getElementById('hearts-container');
+            const container = document.getElementById('floating-container');
             const heartEmojis = ['💖', '❤️', '💕', '💓', '💗', '💘', '💝', '💞'];
+            
+            // รายการ URL รูปภาพที่จะลอยขึ้นมา (เปลี่ยนเป็น URL รูปภาพของคุณ)
+            const imageUrls = [
+                'https://drive.google.com/file/d/1nr212I_9ZPrb4vhEWbiiQoOGdm3dLSkv/view?usp=drive_link',
+                'https://drive.google.com/file/d/1cvU54UVfUGdLADeS7LrI9yyTUnTnS8nG/view?usp=drive_link',
+                'https://drive.google.com/file/d/1sb7XtgHSObRe_alkom_7wwip2o8rJx6S/view?usp=drive_link'
+            ];
+            
             const firstPage = document.getElementById('first-page');
             const messagePage = document.getElementById('message-page');
             const readBtn = document.getElementById('read-btn');
@@ -189,14 +207,54 @@
                 }, duration * 1000);
             }
             
-            // สร้างหัวใจทุกๆ 150ms (เพิ่มความถี่)
-            setInterval(createHeartEmoji, 1000);
-            
-            // สร้างหัวใจเริ่มต้นจำนวนมาก
-            for (let i = 0; i < 50; i++) {
+            // สร้างรูปภาพลอยขึ้น
+            function createFloatingImage() {
+                const img = document.createElement('img');
+                img.classList.add('floating-image');
+                
+                // สุ่มตำแหน่งแนวนอน
+                const startPositionX = Math.random() * window.innerWidth;
+                img.style.left = startPositionX + 'px';
+                
+                // สุ่มขนาด
+                const size = Math.floor(Math.random() * 60) + 40;
+                img.style.width = size + 'px';
+                img.style.height = size + 'px';
+                
+                // สุ่มรูปภาพ
+                const imageUrl = imageUrls[Math.floor(Math.random() * imageUrls.length)];
+                img.src = imageUrl;
+                
+                // สุ่มความเร็ว
+                const duration = Math.random() * 20 + 15;
+                img.style.animation = `float ${duration}s linear infinite`;
+                
+                container.appendChild(img);
+                
+                // ลบรูปภาพหลังจากที่อนิเมชันเสร็จสิ้น
                 setTimeout(() => {
+                    img.remove();
+                }, duration * 1000);
+            }
+            
+            // สร้างหัวใจและรูปภาพสลับกัน
+            function createFloatingElement() {
+                // สุ่มว่าจะสร้างหัวใจหรือรูปภาพ (70% เป็นหัวใจ, 30% เป็นรูปภาพ)
+                if (Math.random() < 0.7) {
                     createHeartEmoji();
-                }, i * 80);
+                } else {
+                    createFloatingImage();
+                }
+            }
+            
+            // สร้างหัวใจและรูปภาพทุกๆ 600ms (ปรับความถี่ตามที่ต้องการ)
+            setInterval(createFloatingElement, 600);
+            
+            // สร้างหัวใจและรูปภาพเริ่มต้นจำนวนน้อยลง
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    createFloatingElement();
+                }, i * 300);
             }
             
             // การเปลี่ยนหน้า
@@ -224,6 +282,5 @@
             // changeMessage("นี่คือข้อความใหม่\nที่มีการขึ้นบรรทัดใหม่\n\nและมีการเว้นบรรทัดด้วย");
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'967d8dcd054f7b40',t:'MTc1Mzk2OTcxMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9681e26a024aee4e',t:'MTc1NDAxNTEyMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
-
